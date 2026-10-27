@@ -1,0 +1,26 @@
+# Compilación de Maven
+target/
+
+# Eclipse
+.metadata/
+.settings/
+.classpath
+.project
+.factorypath
+bin/
+
+# IntelliJ / VS Code (por si alguien los usa)
+.idea/
+*.iml
+.vscode/
+
+# Credenciales locales (NUNCA subir)
+src/main/resources/application-local.properties
+.env
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
