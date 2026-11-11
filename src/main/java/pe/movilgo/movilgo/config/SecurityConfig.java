@@ -1,0 +1,22 @@
+package pe.movilgo.movilgo.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+/** Rutas públicas y protegidas de MovilGo (Spring Security). */
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    SecurityFilterChain filtros(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers("/", "/catalogo/**", "/css/**", "/img/**", "/error", "/api/v1/vehiculos/**").permitAll()
+                .anyRequest().authenticated())
+            .formLogin(Customizer.withDefaults())
+            .logout(Customizer.withDefaults());
+        return http.build();
+    }
+}
