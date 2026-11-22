@@ -21,7 +21,7 @@
           <span class="badge text-bg-success" th:text="${v.estado}">DISPONIBLE</span>
         </div>
         <div class="card-footer bg-white border-0 pb-3">
-          <a class="btn mg-btn w-100" th:href="@{/login}">Reservar</a>
+          <a class="btn mg-btn w-100" th:href="@{/reservas/nueva(vehiculo=${v.idVehiculo})}">Reservar</a>
         </div>
       </div>
     </div>
