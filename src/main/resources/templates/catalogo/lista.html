@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Catálogo')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+<header class="mg-hero py-5">
+  <div class="container">
+    <h1 class="fw-bold">Catálogo de vehículos</h1>
+    <p class="lead mb-0">Camionetas 4x4, buses, autos y scooters para minería, empresas y personas.</p>
+  </div>
+</header>
+<main class="container py-4">
+  <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}">Mensaje</div>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col" th:each="v : ${vehiculos}">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <span class="badge mg-badge mb-2" th:text="${v.categoria}">Camioneta</span>
+          <h2 class="h5 card-title" th:text="|${v.marca} ${v.modelo}|">Toyota Hilux</h2>
+          <p class="mb-2"><span class="fs-4 fw-bold mg-precio" th:text="|S/ ${v.precioDia}|">S/ 320</span> <small class="text-muted">por día</small></p>
+          <span class="badge text-bg-success" th:text="${v.estado}">DISPONIBLE</span>
+        </div>
+        <div class="card-footer bg-white border-0 pb-3">
+          <a class="btn mg-btn w-100" th:href="@{/reservas/nueva(vehiculo=${v.idVehiculo})}">Reservar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="text-muted mt-4" th:if="${#lists.isEmpty(vehiculos)}">No hay vehículos disponibles en este momento.</p>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>
