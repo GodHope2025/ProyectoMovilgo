@@ -13,12 +13,14 @@
   <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}">Mensaje</div>
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col" th:each="v : ${vehiculos}">
-      <div class="card h-100 shadow-sm">
+      <div class="card h-100 shadow-sm border-0">
+        <img class="mg-foto" th:if="${v.imagen}" th:src="@{${v.imagen}}" th:alt="|${v.marca} ${v.modelo}|" loading="lazy">
+        <div class="mg-foto-vacia" th:unless="${v.imagen}"><i class="bi" th:classappend="${v.icono}"></i></div>
         <div class="card-body">
           <span class="badge mg-badge mb-2" th:text="${v.categoria}">Camioneta</span>
           <h2 class="h5 card-title" th:text="|${v.marca} ${v.modelo}|">Toyota Hilux</h2>
           <p class="mb-2"><span class="fs-4 fw-bold mg-precio" th:text="|S/ ${v.precioDia}|">S/ 320</span> <small class="text-muted">por día</small></p>
-          <span class="badge text-bg-success" th:text="${v.estado}">DISPONIBLE</span>
+          <span class="badge text-bg-success"><i class="bi bi-check-circle me-1"></i><span th:text="${v.estado}">DISPONIBLE</span></span>
         </div>
         <div class="card-footer bg-white border-0 pb-3">
           <a class="btn mg-btn w-100" th:href="@{/reservas/nueva(vehiculo=${v.idVehiculo})}">Reservar</a>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Alquiler de vehículos en Arequipa')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+
+<header class="mg-portada py-5">
+  <div class="container py-md-5">
+    <span class="badge bg-light text-dark mb-3"><i class="bi bi-geo-alt-fill me-1"></i>Arequipa · Sur del Perú</span>
+    <h1 class="display-5 fw-bold mb-3">Vehículos listos para la mina, tu empresa y tu viaje</h1>
+    <p class="lead mb-4">Camionetas 4x4, buses de personal, minivans, autos y scooters. Reserva en línea, paga en
+      15 minutos y recoge tu vehículo revisado.</p>
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-light btn-lg fw-semibold" th:href="@{/catalogo}"><i class="bi bi-search me-2"></i>Ver vehículos</a>
+      <a class="btn btn-outline-light btn-lg" th:href="@{/registro}" th:unless="${autenticado}">Crear cuenta</a>
+    </div>
+    <div class="row g-4 mt-4 text-white" style="max-width: 620px">
+      <div class="col-4"><div class="mg-cifra" th:text="${totalDisponibles}">6</div><small>vehículos disponibles</small></div>
+      <div class="col-4"><div class="mg-cifra">15 min</div><small>para confirmar tu pago</small></div>
+      <div class="col-4"><div class="mg-cifra">20 %</div><small>descuento a empresas desde 30 días</small></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="container py-5">
+    <div class="d-flex justify-content-between align-items-end mb-3">
+      <div>
+        <h2 class="h3 fw-bold mb-1">Vehículos destacados</h2>
+        <p class="text-muted mb-0">Los más pedidos por mineras y empresas de la región.</p>
+      </div>
+      <a class="btn btn-outline-secondary d-none d-md-inline-block" th:href="@{/catalogo}">Ver todo el catálogo</a>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col" th:each="v : ${destacados}">
+        <div class="card h-100 shadow-sm border-0">
+          <img class="mg-foto" th:src="@{${v.imagen}}" th:alt="|${v.marca} ${v.modelo}|" loading="lazy">
+          <div class="card-body">
+            <span class="badge mg-badge mb-2" th:text="${v.categoria}">Camioneta</span>
+            <h3 class="h5" th:text="|${v.marca} ${v.modelo}|">Toyota Hilux</h3>
+            <p class="mb-0"><span class="fs-5 fw-bold mg-precio" th:text="|S/ ${v.precioDia}|">S/ 320</span>
+              <small class="text-muted">por día</small></p>
+          </div>
+          <div class="card-footer bg-white border-0 pb-3">
+            <a class="btn mg-btn w-100" th:href="@{/reservas/nueva(vehiculo=${v.idVehiculo})}">Reservar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mg-seccion-clara py-5">
+    <div class="container">
+      <h2 class="h3 fw-bold text-center mb-4">¿Por qué MovilGo?</h2>
+      <div class="row g-4 text-center">
+        <div class="col-md-4">
+          <span class="mg-icono mb-3"><i class="bi bi-shield-check"></i></span>
+          <h3 class="h6 fw-bold">Clientes verificados</h3>
+          <p class="text-muted small mb-0">Validamos DNI, RUC y licencia de conducir para prevenir fraudes y robos.</p>
+        </div>
+        <div class="col-md-4">
+          <span class="mg-icono mb-3"><i class="bi bi-calendar2-check"></i></span>
+          <h3 class="h6 fw-bold">Sin reservas cruzadas</h3>
+          <p class="text-muted small mb-0">Un vehículo nunca se reserva dos veces en las mismas fechas.</p>
+        </div>
+        <div class="col-md-4">
+          <span class="mg-icono mb-3"><i class="bi bi-tools"></i></span>
+          <h3 class="h6 fw-bold">Revisado en cada entrega</h3>
+          <p class="text-muted small mb-0">Checklist de devolución y revisión técnica antes de volver al catálogo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container py-5">
+    <h2 class="h3 fw-bold text-center mb-4">Reserva en tres pasos</h2>
+    <div class="row g-4">
+      <div class="col-md-4 d-flex gap-3">
+        <span class="mg-paso flex-shrink-0">1</span>
+        <div><h3 class="h6 fw-bold mb-1">Crea tu cuenta</h3><p class="text-muted small mb-0">Persona con DNI o empresa con RUC.</p></div>
+      </div>
+      <div class="col-md-4 d-flex gap-3">
+        <span class="mg-paso flex-shrink-0">2</span>
+        <div><h3 class="h6 fw-bold mb-1">Elige fechas y vehículo</h3><p class="text-muted small mb-0">Ves el precio final con descuento al instante.</p></div>
+      </div>
+      <div class="col-md-4 d-flex gap-3">
+        <span class="mg-paso flex-shrink-0">3</span>
+        <div><h3 class="h6 fw-bold mb-1">Paga en 15 minutos</h3><p class="text-muted small mb-0">Con tarjeta, Yape, Plin o transferencia.</p></div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <a class="btn mg-btn btn-lg" th:href="@{/catalogo}">Empezar a reservar</a>
+    </div>
+  </section>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>

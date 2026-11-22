@@ -17,13 +17,30 @@
   </div>
   <form th:if="${reserva.estado.name() == 'PENDIENTE_PAGO'}" th:action="@{/pagos/{id}(id=${reserva.idReserva})}" method="post"
         class="card card-body shadow-sm">
-    <p class="fw-semibold mb-2">Medio de pago</p>
-    <div class="form-check" th:each="m, i : ${metodos}">
-      <input class="form-check-input" type="radio" name="metodo" th:id="|metodo${i.index}|" th:value="${m}" th:checked="${i.first}">
-      <label class="form-check-label" th:for="|metodo${i.index}|" th:text="${m}">TARJETA</label>
+    <p class="fw-semibold mb-2">Elige cómo pagar</p>
+    <div class="row g-2">
+      <div class="col-sm-6" th:each="m, i : ${metodos}">
+        <input class="btn-check" type="radio" name="metodo" th:id="|metodo${i.index}|" th:value="${m}" th:checked="${i.first}">
+        <label class="mg-metodo" th:for="|metodo${i.index}|" th:switch="${m.name()}">
+          <th:block th:case="'TARJETA'"><i class="bi bi-credit-card-2-front"></i>
+            <span><strong>Tarjeta</strong><br><small class="text-muted">Crédito o débito: Visa, Mastercard</small></span></th:block>
+          <th:block th:case="'YAPE'"><i class="bi bi-phone"></i>
+            <span><strong>Yape</strong><br><small class="text-muted">Pago desde tu celular</small></span></th:block>
+          <th:block th:case="'PLIN'"><i class="bi bi-phone-vibrate"></i>
+            <span><strong>Plin</strong><br><small class="text-muted">Pago desde tu celular</small></span></th:block>
+          <th:block th:case="*"><i class="bi bi-bank"></i>
+            <span><strong>Transferencia</strong><br><small class="text-muted">Para empresas (BCP, BBVA, Interbank)</small></span></th:block>
+        </label>
+      </div>
     </div>
-    <p class="small text-muted mt-3 mb-0">Pasarela simulada para el proyecto académico: no se realiza ningún cobro real.</p>
-    <button class="btn mg-btn mt-3" type="submit">Pagar</button>
+    <div class="alert alert-light border small mt-3 mb-0">
+      <div data-detalle-metodo="TARJETA"><i class="bi bi-lock-fill me-1"></i>Te llevaremos a la pasarela segura del banco para ingresar los datos de tu tarjeta.</div>
+      <div data-detalle-metodo="YAPE" hidden><i class="bi bi-phone me-1"></i>Recibirás la solicitud de pago en la app Yape del celular que registraste.</div>
+      <div data-detalle-metodo="PLIN" hidden><i class="bi bi-phone me-1"></i>Recibirás la solicitud de pago en la app de tu banco con Plin.</div>
+      <div data-detalle-metodo="TRANSFERENCIA" hidden><i class="bi bi-bank me-1"></i>Te mostraremos la cuenta de MovilGo y el código de operación para tu transferencia.</div>
+    </div>
+    <p class="small text-muted mt-3 mb-0"><i class="bi bi-info-circle me-1"></i>Pasarela simulada para el proyecto académico: no se realiza ningún cobro real.</p>
+    <button class="btn mg-btn btn-lg mt-3" type="submit"><i class="bi bi-lock-fill me-2"></i>Pagar <span th:text="|S/ ${reserva.montoTotal}|">S/ 640.00</span></button>
   </form>
   <p th:unless="${reserva.estado.name() == 'PENDIENTE_PAGO'}" class="text-muted">Esta reserva está en estado
     <strong th:text="${reserva.estado}">CONFIRMADA</strong>. <a th:href="@{/reservas}">Ver mis reservas</a></p>

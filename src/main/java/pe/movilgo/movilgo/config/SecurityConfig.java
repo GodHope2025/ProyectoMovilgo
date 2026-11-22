@@ -19,7 +19,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filtros(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/catalogo/**", "/registro", "/login", "/css/**", "/img/**", "/error",
+                .requestMatchers("/", "/catalogo/**", "/registro", "/login", "/css/**", "/js/**", "/img/**", "/error",
                         "/api/v1/vehiculos/**", "/actuator/health").permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN", "VENDEDOR")
                 .requestMatchers("/reservas/**", "/pagos/**").hasRole("CLIENTE")
