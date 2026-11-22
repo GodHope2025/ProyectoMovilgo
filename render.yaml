@@ -1,0 +1,19 @@
+# Infraestructura como código para Render (despliegue en la nube)
+services:
+  - type: web
+    name: movilgo
+    runtime: docker
+    plan: free
+    autoDeploy: false            # el despliegue lo dispara GitHub Actions solo si las pruebas pasan
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: DB_URL
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_POOL
+        value: "5"
+      - key: MOVILGO_DEMO_CLAVE
+        sync: false

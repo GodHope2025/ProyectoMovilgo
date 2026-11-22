@@ -1,57 +1,71 @@
-# MovilGo Perú — Sistema web de alquiler y venta de vehículos
+# MovilGo Perú · Grupo 7
 
-Proyecto del **Grupo 7** — UD Implementación de Soluciones para Plataformas Web (CERTUS, 2026).
+Plataforma web para alquilar camionetas 4x4, buses de personal, minivans, autos y scooters a empresas mineras,
+empresas y personas, y vender los seminuevos de la flota.
 
-Aplicación web para alquilar camionetas 4x4, buses, autos y scooters a empresas (incluidas mineras) y personas, y vender unidades seminuevas.
+Curso: **Implementación de Soluciones para Plataformas Web** · Certus Arequipa · Docente: Jonathan Uriel Chavez Ramirez
 
-## Tecnologías
+[![CI - integración continua](https://github.com/GodHope2025/ProyectoMovilgo/actions/workflows/ci.yml/badge.svg)](https://github.com/GodHope2025/ProyectoMovilgo/actions/workflows/ci.yml)
+[![CD - despliegue en la nube](https://github.com/GodHope2025/ProyectoMovilgo/actions/workflows/cd.yml/badge.svg)](https://github.com/GodHope2025/ProyectoMovilgo/actions/workflows/cd.yml)
 
-| Componente | Versión |
-| --- | --- |
-| Java (OpenJDK) | 21 LTS |
-| Spring Boot (MVC, Data JPA, Security, Validation, Cache) | 4.1.x |
-| Hibernate ORM | 7.x (gestionada por Spring Boot) |
-| Thymeleaf + Bootstrap | 3.1 / 5.3 |
-| MySQL | 8.x (o MySQL/MariaDB de XAMPP) |
-| Maven | 3.9 |
-| IDE | Eclipse IDE |
+## Stack
 
-Arquitectura: MVC por capas en un monolito modular con API REST (`/api/v1/**`).
+| Capa | Tecnología |
+|---|---|
+| Backend | Spring Boot 4.1 · Java 21 · Spring MVC · Spring Security 7 |
+| Vistas | Thymeleaf 3.1 · Bootstrap 5.3 |
+| Persistencia | Spring Data JPA · Hibernate 7 · MySQL 8 · HikariCP |
+| Calidad | JUnit 6 · Mockito · AssertJ · JaCoCo · Checkstyle |
+| Integración y entrega | Git · GitHub · GitHub Actions · Docker · Render |
 
-## Estructura
+## Componentes y responsables (Sprint 3)
+
+| Componente | Rama | Responsable |
+|---|---|---|
+| Integración continua, entrega continua y estándares | `feature/HU-09-ci-cd-estandares` | Gustavo Alonso Condor Llanos |
+| Usuarios, roles y seguridad (BCrypt, bloqueo por intentos) | `feature/HU-10-usuarios-seguridad` | Christopher Benjamín Vega Yanac |
+| Registro de clientes con DNI/RUC y licencia | `feature/HU-11-registro-clientes` | Florcita Ivon Quinde Umbo |
+| Reservas sin cruces de fechas (`@Version`, 15 minutos) | `feature/HU-12-reservas` | Fernando Alex Carmac Pintado |
+| Pagos y tarifas por tipo de cliente (Strategy) | `feature/HU-13-pagos-tarifas` | Renato Sebastián Torres Rodríguez |
+| Entrega, devolución y alerta de no devolución (`@Scheduled`) | `feature/HU-14-alquileres-alertas` | Edy Winder Gutierrez |
+
+## Flujo de integración
 
 ```
-src/main/java/pe/movilgo/movilgo/
-├── config/          SecurityConfig, datos iniciales
-├── controller/      controladores web (@Controller)
-│   └── api/         API REST (@RestController)
-├── service/         reglas de negocio (@Service)
-│   └── tarifa/      estrategias de tarifa (Strategy)
-├── repository/      interfaces JpaRepository
-├── model/           entidades JPA (Vehiculo con @Version)
-├── dto/             objetos de transferencia
-├── event/           alertas programadas (Observer, @Scheduled)
-└── exception/       manejo global de errores
-src/main/resources/templates/   vistas Thymeleaf
+feature/HU-XX  --pull request + revisión + CI verde-->  develop  --pull request de release-->  main  --CD-->  Render
 ```
 
-## Integrantes
+- **CI** (`.github/workflows/ci.yml`): en cada push y pull request revisa los estándares con Checkstyle,
+  compila, ejecuta las pruebas JUnit y mide la cobertura con JaCoCo.
+- **CD** (`.github/workflows/cd.yml`): al integrar en `main` vuelve a probar todo y, solo si pasa,
+  despliega en Render y verifica que la aplicación responda en `/actuator/health`.
+- Las reglas del equipo están en [CONTRIBUTING.md](CONTRIBUTING.md).
 
-- Florcita Ivon Quinde Umbo
-- Fernando Alex Carmac Pintado
-- Gustavo Alonso Condor Llanos (Product Owner)
-- Edy Winder Gutierrez
-- Renato Sebastián Torres Rodríguez (Scrum Master)
-- Christopher Benjamín Vega Yanac
+## Ejecutar en local (Eclipse + XAMPP)
 
-## Cómo ejecutar el proyecto
+1. Inicia MySQL en XAMPP (usuario `root` sin contraseña). La base `movilgo_db` se crea sola.
+2. En Eclipse: *File > Import > Existing Maven Projects* y elige esta carpeta.
+3. Ejecuta `MovilgoApplication` (*Run As > Spring Boot App* o *Java Application*).
+4. Abre http://localhost:8080
 
-1. Clonar el repositorio y abrirlo en Eclipse: *File → Import → Maven → Existing Maven Projects*.
-2. Encender MySQL (por ejemplo, desde el XAMPP Control Panel). La base `movilgo_db` se crea sola al iniciar.
-3. Revisar usuario y contraseña de MySQL en `src/main/resources/application.properties` (por defecto `root` sin contraseña, como en XAMPP).
-4. Ejecutar `MovilgoApplication` con *Run → Run As → Java Application*.
-5. Abrir `http://localhost:8080` (catálogo) o `http://localhost:8080/api/v1/vehiculos` (API REST).
+Por consola: `mvn spring-boot:run` · Pruebas: `mvn verify`
 
-## Flujo de trabajo
+### Usuarios de prueba
 
-Ramas `main`, `develop` y `feature/<historia>`; commits con Conventional Commits; cada cambio entra a `develop` mediante un pull request revisado por otro integrante. Tablero del sprint en GitHub Projects.
+| Rol | Correo |
+|---|---|
+| Administrador | admin@movilgo.pe |
+| Vendedor | vendedor@movilgo.pe |
+| Cliente persona (DNI) | cliente@movilgo.pe |
+| Cliente empresa (RUC) | minera@movilgo.pe |
+
+La contraseña de prueba se define con la variable `MOVILGO_DEMO_CLAVE` (en local, `MovilGo2026*`).
+
+## Variables de entorno en la nube
+
+| Variable | Uso |
+|---|---|
+| `DB_URL` | URL JDBC de MySQL |
+| `DB_USER` / `DB_PASSWORD` | Credenciales de la base de datos |
+| `MOVILGO_DEMO_CLAVE` | Contraseña de los usuarios de prueba |
+| `PORT` | Puerto asignado por Render |
