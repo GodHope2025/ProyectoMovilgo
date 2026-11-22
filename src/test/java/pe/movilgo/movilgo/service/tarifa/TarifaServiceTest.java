@@ -22,8 +22,20 @@ class TarifaServiceTest {
     }
 
     @Test
-    void personaPagaPrecioCompleto() {
-        assertThat(tarifas.calcular(cliente(TipoDocumento.DNI), precioDia, 10)).isEqualByComparingTo("6500.00");
+    void personaPagaPrecioCompletoMenosDeSieteDias() {
+        assertThat(tarifas.calcular(cliente(TipoDocumento.DNI), precioDia, 6)).isEqualByComparingTo("3900.00");
+    }
+
+    @Test
+    void personaCincoPorCientoSemanalYDiezMensual() {
+        assertThat(tarifas.calcular(cliente(TipoDocumento.DNI), precioDia, 10)).isEqualByComparingTo("6175.00");
+        assertThat(tarifas.calcular(cliente(TipoDocumento.DNI), precioDia, 30)).isEqualByComparingTo("17550.00");
+    }
+
+    @Test
+    void planTrimestralDescuentaMas() {
+        assertThat(tarifas.calcular(cliente(TipoDocumento.DNI), precioDia, 90)).isEqualByComparingTo("49725.00");
+        assertThat(tarifas.calcular(cliente(TipoDocumento.RUC), precioDia, 90)).isEqualByComparingTo("43875.00");
     }
 
     @Test

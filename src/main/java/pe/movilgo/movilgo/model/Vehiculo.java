@@ -57,4 +57,43 @@ public class Vehiculo {
     public EstadoVehiculo getEstado() { return estado; }
     public void setEstado(EstadoVehiculo estado) { this.estado = estado; }
     public Integer getVersion() { return version; }
+
+    /** Foto del catálogo (static/img/vehiculos). Si no hay foto, la vista muestra el ícono de la categoría. */
+    public String getImagen() {
+        String m = modelo == null ? "" : modelo.toLowerCase();
+        if (m.contains("hilux")) {
+            return "/img/vehiculos/hilux.webp";
+        }
+        if (m.contains("coaster")) {
+            return "/img/vehiculos/coaster.webp";
+        }
+        if (m.contains("h-1")) {
+            return "/img/vehiculos/h1.webp";
+        }
+        if (m.contains("scooter")) {
+            return "/img/vehiculos/scooter.webp";
+        }
+        if (m.contains("l200")) {
+            return "/img/vehiculos/l200.webp";
+        }
+        if (m.contains("accent")) {
+            return "/img/vehiculos/accent.webp";
+        }
+        return null;
+    }
+
+    /** Ícono de Bootstrap Icons según la categoría. */
+    public String getIcono() {
+        String c = categoria == null ? "" : categoria.toLowerCase();
+        if (c.contains("bus")) {
+            return "bi-bus-front-fill";
+        }
+        if (c.contains("scooter")) {
+            return "bi-scooter";
+        }
+        if (c.contains("auto")) {
+            return "bi-car-front-fill";
+        }
+        return "bi-truck-front-fill";
+    }
 }

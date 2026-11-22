@@ -16,7 +16,7 @@ public class CatalogoController {
         this.vehiculos = vehiculos;
     }
 
-    @GetMapping({"/", "/catalogo"})
+    @GetMapping("/catalogo")
     public String listar(Model model) {
         model.addAttribute("vehiculos", vehiculos.catalogo());
         return "catalogo/lista";   // templates/catalogo/lista.html

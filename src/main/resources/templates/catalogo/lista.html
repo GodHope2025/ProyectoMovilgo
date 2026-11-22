@@ -11,14 +11,26 @@
 </header>
 <main class="container py-4">
   <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}">Mensaje</div>
+  <div class="d-flex flex-wrap align-items-center gap-2 mb-4" id="filtros">
+    <span class="small text-muted me-1"><i class="bi bi-funnel me-1"></i>Filtrar:</span>
+    <button type="button" class="btn btn-sm mg-chip activo" data-filtro="">Todos</button>
+    <button type="button" class="btn btn-sm mg-chip" data-filtro="camioneta"><i class="bi bi-truck-front me-1"></i>Camionetas 4x4</button>
+    <button type="button" class="btn btn-sm mg-chip" data-filtro="bus"><i class="bi bi-bus-front me-1"></i>Buses</button>
+    <button type="button" class="btn btn-sm mg-chip" data-filtro="minivan"><i class="bi bi-people me-1"></i>Minivans</button>
+    <button type="button" class="btn btn-sm mg-chip" data-filtro="auto"><i class="bi bi-car-front me-1"></i>Autos</button>
+    <button type="button" class="btn btn-sm mg-chip" data-filtro="scooter"><i class="bi bi-scooter me-1"></i>Scooters</button>
+    <span class="small text-muted ms-auto" id="contadorFlota"></span>
+  </div>
   <div class="row row-cols-1 row-cols-md-3 g-4">
-    <div class="col" th:each="v : ${vehiculos}">
-      <div class="card h-100 shadow-sm">
+    <div class="col" th:each="v : ${vehiculos}" th:attr="data-categoria=${#strings.toLowerCase(v.categoria)}">
+      <div class="card h-100 shadow-sm border-0">
+        <img class="mg-foto" th:if="${v.imagen}" th:src="@{${v.imagen}}" th:alt="|${v.marca} ${v.modelo}|" loading="lazy">
+        <div class="mg-foto-vacia" th:unless="${v.imagen}"><i class="bi" th:classappend="${v.icono}"></i></div>
         <div class="card-body">
           <span class="badge mg-badge mb-2" th:text="${v.categoria}">Camioneta</span>
           <h2 class="h5 card-title" th:text="|${v.marca} ${v.modelo}|">Toyota Hilux</h2>
           <p class="mb-2"><span class="fs-4 fw-bold mg-precio" th:text="|S/ ${v.precioDia}|">S/ 320</span> <small class="text-muted">por día</small></p>
-          <span class="badge text-bg-success" th:text="${v.estado}">DISPONIBLE</span>
+          <span class="badge text-bg-success"><i class="bi bi-check-circle me-1"></i><span th:text="${v.estado}">DISPONIBLE</span></span>
         </div>
         <div class="card-footer bg-white border-0 pb-3">
           <a class="btn mg-btn w-100" th:href="@{/reservas/nueva(vehiculo=${v.idVehiculo})}">Reservar</a>
