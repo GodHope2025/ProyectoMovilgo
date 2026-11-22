@@ -1,8 +1,73 @@
-/* Estándar de diseño MovilGo (sección 3.6 B) */
-body { font-family: "Inter", system-ui, Arial, sans-serif; background: #F8FAFC; color: #1F2937; }
-.mg-nav { background: #134E4A; }
-.mg-hero { background: #0F766E; color: #fff; }
-.mg-badge { background: #E6F4F1; color: #134E4A; }
-.mg-precio { color: #0F766E; }
-.mg-btn { background: #0F766E; color: #fff; }
-.mg-btn:hover { background: #134E4A; color: #fff; }
+/* Estándar de diseño MovilGo v2: carbón minero + ámbar de maquinaria */
+:root {
+  --mg-carbon: #1F2523;
+  --mg-carbon-2: #2C3330;
+  --mg-ambar: #EF9F27;
+  --mg-ambar-oscuro: #BA7517;
+  --mg-ambar-claro: #FAEEDA;
+  --mg-texto-ambar: #633806;
+  --mg-arena: #F6F4EF;
+}
+body { font-family: "Inter", system-ui, Arial, sans-serif; background: var(--mg-arena); color: #1F2937; }
+.mg-nav { background: var(--mg-carbon); border-bottom: 3px solid var(--mg-ambar); }
+.mg-logo { width: 34px; height: 34px; }
+.mg-marca { letter-spacing: .2px; }
+.mg-marca span { color: var(--mg-ambar); }
+.mg-hero { background: var(--mg-carbon) url("/img/fondo-mina.webp") center / cover no-repeat; color: #fff; position: relative; }
+.mg-hero::before { content: ""; position: absolute; inset: 0; background: rgba(31, 37, 35, .82); }
+.mg-hero > .container { position: relative; }
+.mg-badge { background: var(--mg-ambar-claro); color: var(--mg-texto-ambar); }
+.mg-precio { color: var(--mg-carbon); }
+.mg-btn { background: var(--mg-ambar); color: var(--mg-carbon); font-weight: 600; border: 0; }
+.mg-btn:hover, .mg-btn:focus { background: var(--mg-ambar-oscuro); color: #fff; }
+.mg-btn-contorno { border: 2px solid #fff; color: #fff; }
+.mg-btn-contorno:hover { background: #fff; color: var(--mg-carbon); }
+a { color: var(--mg-ambar-oscuro); }
+
+/* Portada */
+.mg-portada { position: relative; color: #fff; background: var(--mg-carbon) url("/img/portada.webp") center / cover no-repeat; }
+.mg-portada::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(31, 37, 35, .96) 0%, rgba(31, 37, 35, .8) 50%, rgba(31, 37, 35, .35) 100%); }
+.mg-portada > .container { position: relative; }
+.mg-portada .lead { max-width: 560px; color: #E5E7EB; }
+.mg-portada .display-5 span { color: var(--mg-ambar); }
+.mg-cifra { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--mg-ambar); }
+.mg-icono { width: 52px; height: 52px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; background: var(--mg-carbon); color: var(--mg-ambar); font-size: 1.4rem; }
+.mg-paso { width: 38px; height: 38px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--mg-ambar); color: var(--mg-carbon); font-weight: 800; }
+.mg-seccion-clara { background: #fff; }
+.mg-planes { position: relative; color: #fff; background: var(--mg-carbon) url("/img/fondo-mina.webp") center / cover no-repeat; }
+.mg-planes::before { content: ""; position: absolute; inset: 0; background: rgba(31, 37, 35, .85); }
+.mg-planes > .container { position: relative; }
+.mg-plan { background: #fff; color: #1F2937; border-radius: 16px; padding: 1.5rem; height: 100%; border-top: 6px solid var(--mg-ambar); }
+.mg-plan.destacado { transform: translateY(-8px); box-shadow: 0 1rem 2rem rgba(0, 0, 0, .35); }
+.mg-plan .mg-descuento { font-size: 2.4rem; font-weight: 800; color: var(--mg-ambar-oscuro); line-height: 1; }
+.mg-cinta { background: var(--mg-ambar); color: var(--mg-carbon); font-weight: 700; }
+
+/* Catálogo */
+.mg-foto { aspect-ratio: 16 / 10; object-fit: cover; width: 100%; background: var(--mg-ambar-claro); }
+.mg-foto-vacia { aspect-ratio: 16 / 10; display: flex; align-items: center; justify-content: center; background: var(--mg-carbon-2); color: var(--mg-ambar); font-size: 4rem; }
+.card { border-radius: 14px; overflow: hidden; transition: transform .15s ease, box-shadow .15s ease; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 .75rem 1.5rem rgba(31, 37, 35, .15) !important; }
+
+/* Contraseñas */
+.mg-reglas li { color: #6B7280; }
+.mg-reglas li.ok { color: #15803D; }
+
+/* Medios de pago */
+.mg-metodo { cursor: pointer; border: 2px solid #E5E7EB; border-radius: 12px; padding: .8rem 1rem; display: flex; align-items: center; gap: .8rem; height: 100%; background: #fff; }
+.btn-check:checked + .mg-metodo { border-color: var(--mg-ambar); background: var(--mg-ambar-claro); }
+.mg-metodo i { font-size: 1.6rem; color: var(--mg-carbon); }
+.mg-pie { background: var(--mg-carbon); color: #fff; border-top: 3px solid var(--mg-ambar); }
+
+/* Interacción: aparecer al hacer scroll y animaciones suaves */
+.mg-aparecer { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.mg-aparecer.visible { opacity: 1; transform: none; }
+.mg-btn { transition: transform .15s ease, background .15s ease; }
+.mg-btn:hover { transform: translateY(-2px); }
+.mg-icono { transition: transform .2s ease; }
+.mg-aparecer:hover .mg-icono { transform: rotate(-8deg) scale(1.08); }
+@media (prefers-reduced-motion: reduce) {
+  .mg-aparecer { opacity: 1; transform: none; transition: none; }
+}
+.mg-chip { border: 1px solid #D3D1C7; border-radius: 999px; background: #fff; color: var(--mg-carbon); }
+.mg-chip:hover { border-color: var(--mg-ambar); }
+.mg-chip.activo { background: var(--mg-carbon); color: var(--mg-ambar); border-color: var(--mg-carbon); }

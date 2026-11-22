@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Términos de uso')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+<main class="container py-5" style="max-width: 820px">
+  <h1 class="h3 fw-bold mb-3"><i class="bi bi-file-earmark-text me-2"></i>Términos de uso</h1>
+  <div class="card card-body shadow-sm border-0">
+    <h2 class="h6 fw-bold">Reservas y pagos</h2>
+    <p class="small">Una reserva queda pendiente de pago durante 15 minutos; si no se paga, se libera. Una reserva dura como
+      máximo 90 días. Los descuentos por plan semanal, mensual o trimestral se calculan solos según los días.</p>
+    <h2 class="h6 fw-bold">Requisitos del cliente</h2>
+    <p class="small">Las personas deben registrar DNI y licencia de conducir vigente; las empresas, un RUC válido.</p>
+    <h2 class="h6 fw-bold">Entrega y devolución</h2>
+    <p class="small">El vehículo se entrega revisado y se devuelve con un checklist. Si no se devuelve dentro de las 24 horas
+      siguientes a la fecha pactada, se activa la alerta de posible robo y el personal de MovilGo inicia la recuperación del vehículo.</p>
+    <h2 class="h6 fw-bold">Cancelaciones</h2>
+    <p class="small mb-0">Puedes cancelar una reserva antes de la fecha de inicio desde "Mis reservas".</p>
+  </div>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>

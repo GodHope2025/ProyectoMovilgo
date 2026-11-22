@@ -7,6 +7,7 @@
   <h1 class="h3 fw-bold mb-1">Crear cuenta</h1>
   <p class="text-muted mb-4">Personas con DNI y empresas con RUC. Validamos tus datos para prevenir fraudes.</p>
   <div class="alert alert-danger" th:if="${error}" th:text="${error}">Error</div>
+  <p class="small mb-3">¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
   <form th:action="@{/registro}" th:object="${clienteForm}" method="post" class="card card-body shadow-sm">
     <div class="row g-3">
       <div class="col-md-4">
@@ -39,20 +40,57 @@
                th:classappend="${#fields.hasErrors('licencia')} ? 'is-invalid'">
         <div class="invalid-feedback" th:errors="*{licencia}">Error</div>
       </div>
-      <div class="col-md-6">
+      <div class="col-12">
         <label class="form-label" for="correo">Correo</label>
-        <input class="form-control" type="email" th:field="*{correo}" id="correo"
+        <input class="form-control" type="email" th:field="*{correo}" id="correo" autocomplete="email"
                th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid'">
         <div class="invalid-feedback" th:errors="*{correo}">Error</div>
       </div>
       <div class="col-md-6">
         <label class="form-label" for="clave">Contraseña</label>
-        <input class="form-control" type="password" th:field="*{clave}" id="clave"
-               th:classappend="${#fields.hasErrors('clave')} ? 'is-invalid'">
-        <div class="invalid-feedback" th:errors="*{clave}">Error</div>
+        <div class="input-group has-validation">
+          <input class="form-control" type="password" th:field="*{clave}" id="clave" autocomplete="new-password"
+                 th:classappend="${#fields.hasErrors('clave')} ? 'is-invalid'">
+          <button class="btn btn-outline-secondary" type="button" data-mostrar-clave="clave" aria-label="Mostrar contraseña">
+            <i class="bi bi-eye"></i></button>
+          <div class="invalid-feedback" th:errors="*{clave}">Error</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="confirmarClave">Repite la contraseña</label>
+        <div class="input-group has-validation">
+          <input class="form-control" type="password" th:field="*{confirmarClave}" id="confirmarClave" autocomplete="new-password"
+                 th:classappend="${#fields.hasErrors('confirmarClave') or #fields.hasErrors('clavesCoinciden')} ? 'is-invalid'">
+          <button class="btn btn-outline-secondary" type="button" data-mostrar-clave="confirmarClave" aria-label="Mostrar contraseña">
+            <i class="bi bi-eye"></i></button>
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('confirmarClave')}" th:errors="*{confirmarClave}">Error</div>
+          <div class="invalid-feedback" th:if="${#fields.hasErrors('clavesCoinciden')}" th:errors="*{clavesCoinciden}">Error</div>
+        </div>
+        <div id="avisoCoinciden" class="small text-danger mt-1" hidden><i class="bi bi-x-circle me-1"></i>Las contraseñas no coinciden</div>
+      </div>
+      <div class="col-12">
+        <p class="small fw-semibold mb-1">Tu contraseña debe tener:</p>
+        <ul class="list-unstyled small mg-reglas row row-cols-1 row-cols-sm-2 mb-0">
+          <li class="col" data-regla="largo"><i class="bi bi-circle me-1"></i>De 8 a 64 caracteres, sin espacios</li>
+          <li class="col" data-regla="mayuscula"><i class="bi bi-circle me-1"></i>Una letra mayúscula (A-Z)</li>
+          <li class="col" data-regla="minuscula"><i class="bi bi-circle me-1"></i>Una letra minúscula (a-z)</li>
+          <li class="col" data-regla="numero"><i class="bi bi-circle me-1"></i>Un número (0-9)</li>
+          <li class="col" data-regla="simbolo"><i class="bi bi-circle me-1"></i>Un símbolo (! # $ % * @ …)</li>
+        </ul>
+      </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" th:field="*{aceptaPrivacidad}" id="aceptaPrivacidad"
+                 th:classappend="${#fields.hasErrors('aceptaPrivacidad')} ? 'is-invalid'">
+          <label class="form-check-label small" for="aceptaPrivacidad">
+            Acepto la <a th:href="@{/privacidad}" target="_blank">política de privacidad</a> y los
+            <a th:href="@{/terminos}" target="_blank">términos de uso</a>. Autorizo el tratamiento de mis datos
+            personales según la Ley N.° 29733.</label>
+          <div class="invalid-feedback" th:errors="*{aceptaPrivacidad}">Error</div>
+        </div>
       </div>
     </div>
-    <button class="btn mg-btn mt-4" type="submit">Crear cuenta</button>
+    <button class="btn mg-btn mt-4" type="submit"><i class="bi bi-shield-lock me-2"></i>Crear cuenta</button>
   </form>
 </main>
 <footer th:replace="~{fragmentos/layout :: pie}"></footer>

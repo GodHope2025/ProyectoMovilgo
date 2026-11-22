@@ -10,7 +10,7 @@
     </parent>
     <groupId>pe.movilgo</groupId>
     <artifactId>movilgo</artifactId>
-    <version>0.3.0</version>
+    <version>0.3.1</version>
     <name>movilgo</name>
     <description>MovilGo Perú: alquiler y venta de vehículos (Grupo 7)</description>
     <properties>
