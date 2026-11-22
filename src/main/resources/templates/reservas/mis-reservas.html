@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Mis reservas')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+<main class="container py-5">
+  <h1 class="h3 fw-bold mb-4">Mis reservas</h1>
+  <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}">Mensaje</div>
+  <p class="text-muted" th:if="${#lists.isEmpty(reservas)}">Aún no tienes reservas. <a th:href="@{/catalogo}">Ver catálogo</a></p>
+  <div class="table-responsive" th:unless="${#lists.isEmpty(reservas)}">
+    <table class="table align-middle bg-white shadow-sm">
+      <thead class="table-light">
+        <tr><th>N.°</th><th>Vehículo</th><th>Fechas</th><th>Monto</th><th>Estado</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr th:each="r : ${reservas}">
+          <td th:text="${r.idReserva}">1</td>
+          <td th:text="|${r.vehiculo.marca} ${r.vehiculo.modelo}|">Toyota Hilux</td>
+          <td th:text="|${#temporals.format(r.fechaInicio, 'dd/MM/yyyy')} al ${#temporals.format(r.fechaFin, 'dd/MM/yyyy')} (${r.dias} días)|">fechas</td>
+          <td th:text="|S/ ${r.montoTotal}|">S/ 640.00</td>
+          <td><span class="badge text-bg-secondary" th:text="${r.estado}">PENDIENTE_PAGO</span></td>
+          <td class="text-end">
+            <form class="d-inline" th:if="${r.estado.name() == 'PENDIENTE_PAGO' or r.estado.name() == 'CONFIRMADA'}"
+                  th:action="@{/reservas/{id}/cancelar(id=${r.idReserva})}" method="post">
+              <button class="btn btn-sm btn-outline-danger" type="submit">Cancelar</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>
