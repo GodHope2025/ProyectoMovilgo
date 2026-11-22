@@ -5,12 +5,21 @@
 <nav th:replace="~{fragmentos/layout :: menu}"></nav>
 <main class="container py-5" style="max-width: 720px">
   <h1 class="h3 fw-bold mb-4">Reservar vehículo</h1>
-  <div class="card shadow-sm mb-4">
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="row g-0">
+      <div class="col-sm-5">
+        <img class="mg-foto h-100" th:if="${vehiculo.imagen}" th:src="@{${vehiculo.imagen}}" th:alt="|${vehiculo.marca} ${vehiculo.modelo}|">
+        <div class="mg-foto-vacia h-100" th:unless="${vehiculo.imagen}"><i class="bi" th:classappend="${vehiculo.icono}"></i></div>
+      </div>
+      <div class="col-sm-7">
     <div class="card-body">
       <span class="badge mg-badge mb-2" th:text="${vehiculo.categoria}">Camioneta</span>
       <h2 class="h5" th:text="|${vehiculo.marca} ${vehiculo.modelo}|">Toyota Hilux</h2>
       <p class="mb-0"><span class="fw-bold mg-precio" th:text="|S/ ${vehiculo.precioDia}|">S/ 320</span> por día ·
-        empresas con RUC: 10 % de descuento desde 7 días y 20 % desde 30 días.</p>
+        planes de larga duración: personas -5 % / -10 % / -15 % y empresas con RUC -10 % / -20 % / -25 %
+        desde 7, 30 y 90 días.</p>
+    </div>
+      </div>
     </div>
   </div>
   <div class="alert alert-danger" th:if="${error}" th:text="${error}">Error</div>

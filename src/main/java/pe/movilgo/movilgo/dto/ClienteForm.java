@@ -1,5 +1,6 @@
 package pe.movilgo.movilgo.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,9 @@ import pe.movilgo.movilgo.model.TipoDocumento;
 
 /** Datos del formulario de registro de clientes, validados con Bean Validation. */
 public class ClienteForm {
+
+    /** Política de contraseñas: 8 a 64 caracteres con minúscula, mayúscula, número y símbolo. */
+    public static final String PATRON_CLAVE = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9\\s])\\S{8,64}$";
 
     @NotNull(message = "Elige el tipo de documento")
     private TipoDocumento tipoDocumento = TipoDocumento.DNI;
@@ -34,8 +38,15 @@ public class ClienteForm {
     private String correo;
 
     @NotBlank(message = "Ingresa una contraseña")
-    @Size(min = 8, max = 64, message = "La contraseña debe tener entre 8 y 64 caracteres")
+    @Pattern(regexp = PATRON_CLAVE,
+            message = "Usa de 8 a 64 caracteres, sin espacios, con al menos una mayúscula, una minúscula, un número y un símbolo")
     private String clave;
+
+    @NotBlank(message = "Repite tu contraseña")
+    private String confirmarClave;
+
+    @AssertTrue(message = "Debes aceptar la política de privacidad y los términos de uso")
+    private boolean aceptaPrivacidad;
 
     public TipoDocumento getTipoDocumento() {
         return tipoDocumento;
@@ -91,5 +102,27 @@ public class ClienteForm {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+
+    public String getConfirmarClave() {
+        return confirmarClave;
+    }
+
+    public void setConfirmarClave(String confirmarClave) {
+        this.confirmarClave = confirmarClave;
+    }
+
+    public boolean isAceptaPrivacidad() {
+        return aceptaPrivacidad;
+    }
+
+    public void setAceptaPrivacidad(boolean aceptaPrivacidad) {
+        this.aceptaPrivacidad = aceptaPrivacidad;
+    }
+
+    /** Las dos contraseñas deben coincidir (Bean Validation lo reporta en el campo clavesCoinciden). */
+    @AssertTrue(message = "Las contraseñas no coinciden")
+    public boolean isClavesCoinciden() {
+        return clave == null || clave.equals(confirmarClave);
     }
 }
