@@ -45,3 +45,51 @@ document.querySelectorAll('input[name="metodo"]').forEach(function (radio) {
   radio.addEventListener('change', mostrar);
   mostrar();
 });
+
+// Animaciones de la portada: los bloques aparecen al hacer scroll y las cifras cuentan hacia arriba
+var bloques = document.querySelectorAll('.mg-aparecer');
+if ('IntersectionObserver' in window && bloques.length) {
+  var observador = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observador.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  bloques.forEach(function (b, i) { b.style.transitionDelay = (i % 4) * 0.08 + 's'; observador.observe(b); });
+} else {
+  bloques.forEach(function (b) { b.classList.add('visible'); });
+}
+document.querySelectorAll('[data-contar]').forEach(function (el) {
+  var meta = parseInt(el.getAttribute('data-contar'), 10);
+  var pre = el.getAttribute('data-prefijo') || '';
+  var suf = el.getAttribute('data-sufijo') || '';
+  if (isNaN(meta) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+  var inicio = null;
+  var paso = function (t) {
+    if (!inicio) { inicio = t; }
+    var avance = Math.min((t - inicio) / 1200, 1);
+    el.textContent = pre + Math.round(meta * avance) + suf;
+    if (avance < 1) { requestAnimationFrame(paso); }
+  };
+  requestAnimationFrame(paso);
+});
+
+// Catálogo: filtrar la flota por tipo de vehículo sin recargar la página
+var chips = document.querySelectorAll('[data-filtro]');
+var contador = document.getElementById('contadorFlota');
+var filtrar = function (tipo) {
+  var visibles = 0;
+  document.querySelectorAll('[data-categoria]').forEach(function (c) {
+    var mostrar = !tipo || c.getAttribute('data-categoria').indexOf(tipo) >= 0;
+    c.hidden = !mostrar;
+    if (mostrar) { visibles++; }
+  });
+  if (contador) { contador.textContent = visibles + (visibles === 1 ? ' vehículo' : ' vehículos'); }
+};
+chips.forEach(function (chip) {
+  chip.addEventListener('click', function () {
+    chips.forEach(function (c) { c.classList.remove('activo'); });
+    chip.classList.add('activo');
+    filtrar(chip.getAttribute('data-filtro'));
+  });
+});
+if (chips.length) { filtrar(''); }

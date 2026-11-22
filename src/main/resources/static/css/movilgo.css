@@ -57,3 +57,17 @@ a { color: var(--mg-ambar-oscuro); }
 .btn-check:checked + .mg-metodo { border-color: var(--mg-ambar); background: var(--mg-ambar-claro); }
 .mg-metodo i { font-size: 1.6rem; color: var(--mg-carbon); }
 .mg-pie { background: var(--mg-carbon); color: #fff; border-top: 3px solid var(--mg-ambar); }
+
+/* Interacción: aparecer al hacer scroll y animaciones suaves */
+.mg-aparecer { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.mg-aparecer.visible { opacity: 1; transform: none; }
+.mg-btn { transition: transform .15s ease, background .15s ease; }
+.mg-btn:hover { transform: translateY(-2px); }
+.mg-icono { transition: transform .2s ease; }
+.mg-aparecer:hover .mg-icono { transform: rotate(-8deg) scale(1.08); }
+@media (prefers-reduced-motion: reduce) {
+  .mg-aparecer { opacity: 1; transform: none; transition: none; }
+}
+.mg-chip { border: 1px solid #D3D1C7; border-radius: 999px; background: #fff; color: var(--mg-carbon); }
+.mg-chip:hover { border-color: var(--mg-ambar); }
+.mg-chip.activo { background: var(--mg-carbon); color: var(--mg-ambar); border-color: var(--mg-carbon); }

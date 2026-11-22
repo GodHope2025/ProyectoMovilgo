@@ -22,6 +22,8 @@
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/catalogo}">Catálogo</a></li>
+        <li class="nav-item"><a class="nav-link" href="/#planes">Planes por meses</a></li>
+        <li class="nav-item"><a class="nav-link" href="/#seguridad">Seguridad</a></li>
         <li class="nav-item" th:if="${esCliente}"><a class="nav-link" th:href="@{/reservas}">Mis reservas</a></li>
         <li class="nav-item" th:if="${esPersonal}"><a class="nav-link" th:href="@{/admin}">Panel de alquileres</a></li>
       </ul>
@@ -39,7 +41,11 @@
 <footer th:fragment="pie" class="mg-pie text-center small py-4 mt-4">
   <div class="container">
     <p class="mb-1"><img th:src="@{/img/logo.svg}" alt="" width="22" height="22" class="me-1 align-text-bottom"><strong>MovilGo Perú</strong> · Alquiler de vehículos para minería, empresas y personas · Arequipa</p>
-    <p class="mb-0 text-white-50">Grupo 7 · Implementación de Soluciones para Plataformas Web · Certus</p>
+    <p class="mb-1"><a class="link-light" th:href="@{/privacidad}">Política de privacidad</a> ·
+      <a class="link-light" th:href="@{/terminos}">Términos de uso</a> ·
+      <i class="bi bi-lock-fill"></i> Conexión segura HTTPS</p>
+    <p class="mb-0 text-white-50">Grupo 7 · Implementación de Soluciones para Plataformas Web · Certus ·
+      Fotos: Wikimedia Commons (EurovisionNim, CC BY-SA 4.0; Ypy31 y Axel.206, CC0) y archivo del proyecto</p>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script th:src="@{/js/movilgo.js}"></script>

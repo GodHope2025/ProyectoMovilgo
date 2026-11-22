@@ -78,8 +78,19 @@
           <li class="col" data-regla="simbolo"><i class="bi bi-circle me-1"></i>Un símbolo (! # $ % * @ …)</li>
         </ul>
       </div>
+      <div class="col-12">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" th:field="*{aceptaPrivacidad}" id="aceptaPrivacidad"
+                 th:classappend="${#fields.hasErrors('aceptaPrivacidad')} ? 'is-invalid'">
+          <label class="form-check-label small" for="aceptaPrivacidad">
+            Acepto la <a th:href="@{/privacidad}" target="_blank">política de privacidad</a> y los
+            <a th:href="@{/terminos}" target="_blank">términos de uso</a>. Autorizo el tratamiento de mis datos
+            personales según la Ley N.° 29733.</label>
+          <div class="invalid-feedback" th:errors="*{aceptaPrivacidad}">Error</div>
+        </div>
+      </div>
     </div>
-    <button class="btn mg-btn mt-4" type="submit">Crear cuenta</button>
+    <button class="btn mg-btn mt-4" type="submit"><i class="bi bi-shield-lock me-2"></i>Crear cuenta</button>
   </form>
 </main>
 <footer th:replace="~{fragmentos/layout :: pie}"></footer>

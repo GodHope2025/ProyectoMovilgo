@@ -45,6 +45,9 @@ public class ClienteForm {
     @NotBlank(message = "Repite tu contraseña")
     private String confirmarClave;
 
+    @AssertTrue(message = "Debes aceptar la política de privacidad y los términos de uso")
+    private boolean aceptaPrivacidad;
+
     public TipoDocumento getTipoDocumento() {
         return tipoDocumento;
     }
@@ -107,6 +110,14 @@ public class ClienteForm {
 
     public void setConfirmarClave(String confirmarClave) {
         this.confirmarClave = confirmarClave;
+    }
+
+    public boolean isAceptaPrivacidad() {
+        return aceptaPrivacidad;
+    }
+
+    public void setAceptaPrivacidad(boolean aceptaPrivacidad) {
+        this.aceptaPrivacidad = aceptaPrivacidad;
     }
 
     /** Las dos contraseñas deben coincidir (Bean Validation lo reporta en el campo clavesCoinciden). */

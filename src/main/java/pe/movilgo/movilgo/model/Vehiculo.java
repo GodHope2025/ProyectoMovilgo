@@ -73,6 +73,12 @@ public class Vehiculo {
         if (m.contains("scooter")) {
             return "/img/vehiculos/scooter.webp";
         }
+        if (m.contains("l200")) {
+            return "/img/vehiculos/l200.webp";
+        }
+        if (m.contains("accent")) {
+            return "/img/vehiculos/accent.webp";
+        }
         return null;
     }
 

@@ -36,4 +36,12 @@ class ClienteFormTest {
         form.setConfirmarClave("MovilGo2025*");
         assertThat(form.isClavesCoinciden()).isFalse();
     }
+
+    @Test
+    void exigeAceptarLaPoliticaDePrivacidad() {
+        ClienteForm form = new ClienteForm();
+        assertThat(form.isAceptaPrivacidad()).isFalse();
+        form.setAceptaPrivacidad(true);
+        assertThat(form.isAceptaPrivacidad()).isTrue();
+    }
 }

@@ -15,9 +15,9 @@
       <a class="btn mg-btn-contorno btn-lg" href="#planes">Planes por meses</a>
     </div>
     <div class="row g-4 mt-4" style="max-width: 640px">
-      <div class="col-4"><div class="mg-cifra" th:text="${totalDisponibles}">6</div><small>vehículos disponibles</small></div>
+      <div class="col-4"><div class="mg-cifra" th:attr="data-contar=${totalDisponibles}" th:text="${totalDisponibles}">6</div><small>vehículos disponibles</small></div>
       <div class="col-4"><div class="mg-cifra">15 min</div><small>para confirmar tu pago</small></div>
-      <div class="col-4"><div class="mg-cifra">-25 %</div><small>plan trimestral para empresas</small></div>
+      <div class="col-4"><div class="mg-cifra"><span data-contar="25" data-prefijo="-" data-sufijo=" %">-25 %</span></div><small>plan trimestral para empresas</small></div>
     </div>
   </div>
 </header>
@@ -32,7 +32,7 @@
       <a class="btn btn-outline-dark d-none d-md-inline-block" th:href="@{/catalogo}">Ver toda la flota</a>
     </div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col" th:each="v : ${destacados}">
+      <div class="col mg-aparecer" th:each="v : ${destacados}">
         <div class="card h-100 shadow-sm border-0">
           <img class="mg-foto" th:src="@{${v.imagen}}" th:alt="|${v.marca} ${v.modelo}|" loading="lazy">
           <div class="card-body">
@@ -57,7 +57,7 @@
         <p class="text-white-50 mb-0">El descuento se aplica solo al reservar según los días. Personas con DNI y empresas con RUC.</p>
       </div>
       <div class="row g-4 align-items-stretch">
-        <div class="col-md-4">
+        <div class="col-md-4 mg-aparecer">
           <div class="mg-plan">
             <h3 class="h5 fw-bold mb-1"><i class="bi bi-calendar-week me-2"></i>Semanal</h3>
             <p class="text-muted small">Desde 7 días</p>
@@ -66,7 +66,7 @@
             <p class="small text-muted mb-0">Ideal para turnos de obra y viajes de trabajo.</p>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mg-aparecer">
           <div class="mg-plan destacado">
             <span class="badge mg-cinta float-end">Más pedido</span>
             <h3 class="h5 fw-bold mb-1"><i class="bi bi-calendar-month me-2"></i>Mensual</h3>
@@ -76,7 +76,7 @@
             <p class="small text-muted mb-0">Camionetas y buses para la operación minera del mes.</p>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mg-aparecer">
           <div class="mg-plan">
             <h3 class="h5 fw-bold mb-1"><i class="bi bi-calendar3 me-2"></i>Trimestral</h3>
             <p class="text-muted small">90 días (3 meses)</p>
@@ -92,41 +92,52 @@
     </div>
   </section>
 
-  <section class="mg-seccion-clara py-5">
+  <section id="seguridad" class="mg-seccion-clara py-5">
     <div class="container">
-      <h2 class="h3 fw-bold text-center mb-4">¿Por qué MovilGo?</h2>
-      <div class="row g-4 text-center">
-        <div class="col-md-4">
-          <span class="mg-icono mb-3"><i class="bi bi-shield-check"></i></span>
+      <div class="text-center mb-4 mg-aparecer">
+        <span class="badge mg-badge mb-2"><i class="bi bi-shield-check me-1"></i>Confianza</span>
+        <h2 class="h3 fw-bold">Tu seguridad es primero</h2>
+        <p class="text-muted mb-0">Así cuidamos tus datos, tu dinero y nuestros vehículos.</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-sm-6 col-lg-3 mg-aparecer">
+          <span class="mg-icono mb-3"><i class="bi bi-lock"></i></span>
+          <h3 class="h6 fw-bold">Conexión cifrada</h3>
+          <p class="text-muted small mb-0">Todas las páginas viajan por HTTPS: nadie puede leer lo que escribes.</p>
+        </div>
+        <div class="col-sm-6 col-lg-3 mg-aparecer">
+          <span class="mg-icono mb-3"><i class="bi bi-key"></i></span>
+          <h3 class="h6 fw-bold">Cuentas protegidas</h3>
+          <p class="text-muted small mb-0">Contraseñas fuertes cifradas con BCrypt y bloqueo tras 5 intentos fallidos.</p>
+        </div>
+        <div class="col-sm-6 col-lg-3 mg-aparecer">
+          <span class="mg-icono mb-3"><i class="bi bi-person-check"></i></span>
           <h3 class="h6 fw-bold">Clientes verificados</h3>
-          <p class="text-muted small mb-0">Validamos DNI, RUC y licencia de conducir para prevenir fraudes y robos.</p>
+          <p class="text-muted small mb-0">DNI, RUC y licencia validados para prevenir fraudes; alerta si un vehículo no vuelve.</p>
         </div>
-        <div class="col-md-4">
-          <span class="mg-icono mb-3"><i class="bi bi-calendar2-check"></i></span>
-          <h3 class="h6 fw-bold">Sin reservas cruzadas</h3>
-          <p class="text-muted small mb-0">Un vehículo nunca se reserva dos veces en las mismas fechas.</p>
-        </div>
-        <div class="col-md-4">
-          <span class="mg-icono mb-3"><i class="bi bi-tools"></i></span>
-          <h3 class="h6 fw-bold">Revisado en cada entrega</h3>
-          <p class="text-muted small mb-0">Checklist de devolución y revisión técnica antes de volver al catálogo.</p>
+        <div class="col-sm-6 col-lg-3 mg-aparecer">
+          <span class="mg-icono mb-3"><i class="bi bi-file-earmark-lock"></i></span>
+          <h3 class="h6 fw-bold">Datos personales</h3>
+          <p class="text-muted small mb-0">Tratamiento según la Ley N.° 29733. <a th:href="@{/privacidad}">Ver política de privacidad</a>.</p>
         </div>
       </div>
+      <p class="text-center small text-muted mt-4 mb-0 mg-aparecer"><i class="bi bi-patch-check me-1"></i>Desarrollado con las buenas
+        prácticas de seguridad OWASP Top 10 y los controles de ISO/IEC 27001 como referencia.</p>
     </div>
   </section>
 
   <section class="container py-5">
     <h2 class="h3 fw-bold text-center mb-4">Reserva en tres pasos</h2>
     <div class="row g-4">
-      <div class="col-md-4 d-flex gap-3">
+      <div class="col-md-4 d-flex gap-3 mg-aparecer">
         <span class="mg-paso flex-shrink-0">1</span>
         <div><h3 class="h6 fw-bold mb-1">Crea tu cuenta</h3><p class="text-muted small mb-0">Persona con DNI o empresa con RUC.</p></div>
       </div>
-      <div class="col-md-4 d-flex gap-3">
+      <div class="col-md-4 d-flex gap-3 mg-aparecer">
         <span class="mg-paso flex-shrink-0">2</span>
         <div><h3 class="h6 fw-bold mb-1">Elige fechas y vehículo</h3><p class="text-muted small mb-0">Ves el precio final con tu descuento al instante.</p></div>
       </div>
-      <div class="col-md-4 d-flex gap-3">
+      <div class="col-md-4 d-flex gap-3 mg-aparecer">
         <span class="mg-paso flex-shrink-0">3</span>
         <div><h3 class="h6 fw-bold mb-1">Paga en 15 minutos</h3><p class="text-muted small mb-0">Con tarjeta, Yape, Plin o transferencia.</p></div>
       </div>
