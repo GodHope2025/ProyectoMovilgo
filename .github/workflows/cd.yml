@@ -1,0 +1,55 @@
+# Entrega continua: cuando se integra a main, vuelve a probar y despliega en Render solo si todo pasa
+name: CD - despliegue en la nube
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Compilar y ejecutar todas las pruebas
+        run: mvn -B -ntp verify
+
+  desplegar:
+    needs: verificar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disparar el despliegue en Render
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
+            echo "::warning::Falta el secreto RENDER_DEPLOY_HOOK en Settings > Secrets and variables > Actions"
+            exit 1
+          fi
+          curl -fsS -X POST "$RENDER_DEPLOY_HOOK"
+          echo "Despliegue solicitado a Render"
+
+      - name: Prueba de humo (la aplicación responde)
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          if [ -z "$APP_URL" ]; then
+            echo "::notice::Define la variable APP_URL para verificar la salud del despliegue"
+            exit 0
+          fi
+          sleep 120
+          for intento in $(seq 1 30); do
+            if curl -fsS "$APP_URL/actuator/health" | grep -q '"UP"'; then
+              echo "La aplicación está en línea: $APP_URL"
+              exit 0
+            fi
+            echo "Esperando a que la aplicación inicie (intento $intento)..."
+            sleep 20
+          done
+          echo "::error::La aplicación no respondió después del despliegue"
+          exit 1

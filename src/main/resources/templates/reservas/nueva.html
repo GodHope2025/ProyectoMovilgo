@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Nueva reserva')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+<main class="container py-5" style="max-width: 720px">
+  <h1 class="h3 fw-bold mb-4">Reservar vehículo</h1>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <span class="badge mg-badge mb-2" th:text="${vehiculo.categoria}">Camioneta</span>
+      <h2 class="h5" th:text="|${vehiculo.marca} ${vehiculo.modelo}|">Toyota Hilux</h2>
+      <p class="mb-0"><span class="fw-bold mg-precio" th:text="|S/ ${vehiculo.precioDia}|">S/ 320</span> por día ·
+        empresas con RUC: 10 % de descuento desde 7 días y 20 % desde 30 días.</p>
+    </div>
+  </div>
+  <div class="alert alert-danger" th:if="${error}" th:text="${error}">Error</div>
+  <form th:action="@{/reservas}" th:object="${reservaForm}" method="post" class="card card-body shadow-sm">
+    <input type="hidden" th:field="*{idVehiculo}">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="fechaInicio">Fecha de inicio</label>
+        <input class="form-control" type="date" th:field="*{fechaInicio}" id="fechaInicio" th:min="${hoy}"
+               th:classappend="${#fields.hasErrors('fechaInicio')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{fechaInicio}">Error</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="fechaFin">Fecha de devolución</label>
+        <input class="form-control" type="date" th:field="*{fechaFin}" id="fechaFin" th:min="${hoy}"
+               th:classappend="${#fields.hasErrors('fechaFin')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{fechaFin}">Error</div>
+      </div>
+    </div>
+    <p class="small text-muted mt-3 mb-0">La reserva queda pendiente de pago por 15 minutos. Si no se paga, el vehículo se libera.</p>
+    <button class="btn mg-btn mt-3" type="submit">Reservar</button>
+  </form>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>
