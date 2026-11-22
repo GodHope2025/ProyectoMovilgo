@@ -1,0 +1,8 @@
+/* Estándar de diseño MovilGo (sección 3.6 B) */
+body { font-family: "Inter", system-ui, Arial, sans-serif; background: #F8FAFC; color: #1F2937; }
+.mg-nav { background: #134E4A; }
+.mg-hero { background: #0F766E; color: #fff; }
+.mg-badge { background: #E6F4F1; color: #134E4A; }
+.mg-precio { color: #0F766E; }
+.mg-btn { background: #0F766E; color: #fff; }
+.mg-btn:hover { background: #134E4A; color: #fff; }
