@@ -20,6 +20,7 @@
           <td th:text="|S/ ${r.montoTotal}|">S/ 640.00</td>
           <td><span class="badge text-bg-secondary" th:text="${r.estado}">PENDIENTE_PAGO</span></td>
           <td class="text-end">
+            <a class="btn btn-sm mg-btn" th:if="${r.estado.name() == 'PENDIENTE_PAGO'}" th:href="@{/pagos/{id}(id=${r.idReserva})}">Pagar</a>
             <form class="d-inline" th:if="${r.estado.name() == 'PENDIENTE_PAGO' or r.estado.name() == 'CONFIRMADA'}"
                   th:action="@{/reservas/{id}/cancelar(id=${r.idReserva})}" method="post">
               <button class="btn btn-sm btn-outline-danger" type="submit">Cancelar</button>

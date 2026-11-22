@@ -20,6 +20,7 @@ import pe.movilgo.movilgo.model.Reserva;
 import pe.movilgo.movilgo.model.Vehiculo;
 import pe.movilgo.movilgo.repository.ReservaRepository;
 import pe.movilgo.movilgo.repository.VehiculoRepository;
+import pe.movilgo.movilgo.service.tarifa.TarifaService;
 
 /** Reglas de las reservas: fechas válidas, sin cruces y con bloqueo optimista (RN-02 y RN-03). */
 @Service
@@ -32,13 +33,15 @@ public class ReservaService {
     private final ReservaRepository reservaRepo;
     private final VehiculoRepository vehiculoRepo;
     private final ClienteService clientes;
+    private final TarifaService tarifas;
     private final Clock reloj;
 
     public ReservaService(ReservaRepository reservaRepo, VehiculoRepository vehiculoRepo, ClienteService clientes,
-            Clock reloj) {
+            TarifaService tarifas, Clock reloj) {
         this.reservaRepo = reservaRepo;
         this.vehiculoRepo = vehiculoRepo;
         this.clientes = clientes;
+        this.tarifas = tarifas;
         this.reloj = reloj;
     }
 
@@ -60,7 +63,7 @@ public class ReservaService {
             throw new ReglaNegocioException("El vehículo ya está reservado en esas fechas. Elige otras fechas u otro vehículo.");
         }
         long dias = Reserva.contarDias(inicio, fin);
-        BigDecimal monto = vehiculo.getPrecioDia().multiply(BigDecimal.valueOf(dias));
+        BigDecimal monto = tarifas.calcular(cliente, vehiculo.getPrecioDia(), dias);
         return reservaRepo.save(new Reserva(cliente, vehiculo, inicio, fin, monto, LocalDateTime.now(reloj)));
     }
 

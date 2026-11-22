@@ -31,6 +31,9 @@ import pe.movilgo.movilgo.model.Usuario;
 import pe.movilgo.movilgo.model.Vehiculo;
 import pe.movilgo.movilgo.repository.ReservaRepository;
 import pe.movilgo.movilgo.repository.VehiculoRepository;
+import pe.movilgo.movilgo.service.tarifa.TarifaEmpresa;
+import pe.movilgo.movilgo.service.tarifa.TarifaPersona;
+import pe.movilgo.movilgo.service.tarifa.TarifaService;
 
 class ReservaServiceTest {
 
@@ -49,7 +52,8 @@ class ReservaServiceTest {
         vehiculoRepo = mock(VehiculoRepository.class);
         clientes = mock(ClienteService.class);
         Clock reloj = Clock.fixed(ZonedDateTime.of(HOY.atTime(10, 0), RelojConfig.ZONA_LIMA).toInstant(), RelojConfig.ZONA_LIMA);
-        servicio = new ReservaService(reservaRepo, vehiculoRepo, clientes, reloj);
+        TarifaService tarifas = new TarifaService(List.of(new TarifaPersona(), new TarifaEmpresa()));
+        servicio = new ReservaService(reservaRepo, vehiculoRepo, clientes, tarifas, reloj);
         hilux = new Vehiculo("Toyota", "Hilux 4x4", "Camioneta minera", new BigDecimal("300.00"));
         when(vehiculoRepo.buscarParaReservar(1L)).thenReturn(Optional.of(hilux));
         when(clientes.buscarPorCorreo(CORREO)).thenReturn(cliente(TipoDocumento.DNI, "45871236"));
@@ -67,6 +71,13 @@ class ReservaServiceTest {
         assertThat(reserva.getDias()).isEqualTo(3);
         assertThat(reserva.getMontoTotal()).isEqualByComparingTo("900.00");
         assertThat(reserva.getVenceEn()).isEqualTo(LocalDateTime.of(HOY, LocalTime.of(10, 15)));
+    }
+
+    @Test
+    void empresaRecibeDescuentoPorSemana() {
+        when(clientes.buscarPorCorreo(CORREO)).thenReturn(cliente(TipoDocumento.RUC, "20456789123"));
+        Reserva reserva = servicio.crear(CORREO, new ReservaForm(1L, HOY, HOY.plusDays(6)));
+        assertThat(reserva.getMontoTotal()).isEqualByComparingTo("1890.00");
     }
 
     @Test

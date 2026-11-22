@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Pagar reserva')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+<main class="container py-5" style="max-width: 640px">
+  <h1 class="h3 fw-bold mb-4">Pagar reserva N.° <span th:text="${reserva.idReserva}">1</span></h1>
+  <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}">Mensaje</div>
+  <div class="alert alert-danger" th:if="${error}" th:text="${error}">Error</div>
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h2 class="h5" th:text="|${reserva.vehiculo.marca} ${reserva.vehiculo.modelo}|">Toyota Hilux</h2>
+      <p class="mb-1" th:text="|Del ${#temporals.format(reserva.fechaInicio, 'dd/MM/yyyy')} al ${#temporals.format(reserva.fechaFin, 'dd/MM/yyyy')} · ${reserva.dias} días|">fechas</p>
+      <p class="fs-3 fw-bold mg-precio mb-1" th:text="|S/ ${reserva.montoTotal}|">S/ 640.00</p>
+      <p class="small text-muted mb-0">Paga antes de las <strong th:text="${#temporals.format(reserva.venceEn, 'HH:mm')}">10:15</strong>; después la reserva se libera.</p>
+    </div>
+  </div>
+  <form th:if="${reserva.estado.name() == 'PENDIENTE_PAGO'}" th:action="@{/pagos/{id}(id=${reserva.idReserva})}" method="post"
+        class="card card-body shadow-sm">
+    <p class="fw-semibold mb-2">Medio de pago</p>
+    <div class="form-check" th:each="m, i : ${metodos}">
+      <input class="form-check-input" type="radio" name="metodo" th:id="|metodo${i.index}|" th:value="${m}" th:checked="${i.first}">
+      <label class="form-check-label" th:for="|metodo${i.index}|" th:text="${m}">TARJETA</label>
+    </div>
+    <p class="small text-muted mt-3 mb-0">Pasarela simulada para el proyecto académico: no se realiza ningún cobro real.</p>
+    <button class="btn mg-btn mt-3" type="submit">Pagar</button>
+  </form>
+  <p th:unless="${reserva.estado.name() == 'PENDIENTE_PAGO'}" class="text-muted">Esta reserva está en estado
+    <strong th:text="${reserva.estado}">CONFIRMADA</strong>. <a th:href="@{/reservas}">Ver mis reservas</a></p>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>
