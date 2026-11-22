@@ -1,0 +1,51 @@
+# Integración continua: compila, revisa estándares y ejecuta las pruebas en cada push y pull request
+name: CI - integración continua
+
+on:
+  push:
+    branches: [main, develop, "feature/**"]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  compilar-y-probar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Estándares (Checkstyle), compilación, pruebas (JUnit) y cobertura (JaCoCo)
+        run: mvn -B -ntp verify
+
+      - name: Resumen de calidad
+        if: always()
+        run: |
+          echo "## Resultado de la integración" >> "$GITHUB_STEP_SUMMARY"
+          total=$(grep -ho 'tests="[0-9]*"' target/surefire-reports/*.xml 2>/dev/null | grep -o '[0-9]*' | awk '{s+=$1} END {print s+0}')
+          fallas=$(grep -ho 'failures="[0-9]*"' target/surefire-reports/*.xml 2>/dev/null | grep -o '[0-9]*' | awk '{s+=$1} END {print s+0}')
+          echo "- Pruebas ejecutadas: ${total:-0}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Pruebas fallidas: ${fallas:-0}" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f target/site/jacoco/jacoco.csv ]; then
+            cobertura=$(awk -F, 'NR>1 {f+=$8; c+=$9} END {if (f+c>0) printf "%.1f", 100*c/(f+c)}' target/site/jacoco/jacoco.csv)
+            echo "- Cobertura de líneas: ${cobertura} %" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Guardar el JAR compilado
+        uses: actions/upload-artifact@v4
+        with:
+          name: movilgo-jar
+          path: target/movilgo.jar
+
+      - name: Guardar el reporte de cobertura
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reporte-cobertura
+          path: target/site/jacoco

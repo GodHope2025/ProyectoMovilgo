@@ -13,7 +13,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filtros(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/catalogo/**", "/css/**", "/img/**", "/error", "/api/v1/vehiculos/**").permitAll()
+                .requestMatchers("/", "/catalogo/**", "/css/**", "/img/**", "/error", "/api/v1/vehiculos/**",
+                        "/actuator/health").permitAll()
                 .anyRequest().authenticated())
             .formLogin(Customizer.withDefaults())
             .logout(Customizer.withDefaults());
