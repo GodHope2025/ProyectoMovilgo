@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 import pe.movilgo.movilgo.dto.ReservaForm;
 import pe.movilgo.movilgo.exception.ReglaNegocioException;
+import pe.movilgo.movilgo.model.Reserva;
 import pe.movilgo.movilgo.service.ReservaService;
 import pe.movilgo.movilgo.service.VehiculoService;
 
@@ -58,9 +59,9 @@ public class ReservaController {
             Principal principal, Model model, RedirectAttributes redireccion) {
         if (!errores.hasErrors()) {
             try {
-                reservas.crear(principal.getName(), form);
-                redireccion.addFlashAttribute("mensaje", "Reserva creada. Tienes 15 minutos para confirmarla.");
-                return "redirect:/reservas";
+                Reserva reserva = reservas.crear(principal.getName(), form);
+                redireccion.addFlashAttribute("mensaje", "Reserva creada. Tienes 15 minutos para pagarla.");
+                return "redirect:/pagos/" + reserva.getIdReserva();
             } catch (ReglaNegocioException ex) {
                 model.addAttribute("error", ex.getMessage());
             }
