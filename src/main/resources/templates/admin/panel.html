@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Panel de alquileres')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+<main class="container py-5">
+  <h1 class="h3 fw-bold mb-4">Panel de alquileres</h1>
+  <div class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}">Mensaje</div>
+
+  <div class="alert alert-danger" th:unless="${#lists.isEmpty(noDevueltos)}">
+    <strong><i class="bi bi-exclamation-triangle-fill me-1"></i>Alerta de posible robo:</strong>
+    <span th:each="a, i : ${noDevueltos}" th:text="|${a.reserva.vehiculo.marca} ${a.reserva.vehiculo.modelo} (reserva ${a.reserva.idReserva})${i.last ? '' : ', '}|">vehículo</span>
+    no se devolvieron 24 horas después de la fecha límite.
+  </div>
+
+  <h2 class="h5 fw-bold mt-4">Reservas pagadas por entregar</h2>
+  <p class="text-muted" th:if="${#lists.isEmpty(porEntregar)}">No hay entregas pendientes.</p>
+  <div class="table-responsive" th:unless="${#lists.isEmpty(porEntregar)}">
+    <table class="table align-middle bg-white shadow-sm">
+      <thead class="table-light"><tr><th>Reserva</th><th>Cliente</th><th>Vehículo</th><th>Desde</th><th>Hasta</th><th></th></tr></thead>
+      <tbody>
+        <tr th:each="r : ${porEntregar}">
+          <td th:text="${r.idReserva}">1</td>
+          <td th:text="${r.cliente.nombre}">Cliente</td>
+          <td th:text="|${r.vehiculo.marca} ${r.vehiculo.modelo}|">Vehículo</td>
+          <td th:text="${#temporals.format(r.fechaInicio, 'dd/MM/yyyy')}">01/01</td>
+          <td th:text="${#temporals.format(r.fechaFin, 'dd/MM/yyyy')}">02/01</td>
+          <td class="text-end">
+            <form th:action="@{/admin/reservas/{id}/entregar(id=${r.idReserva})}" method="post">
+              <button class="btn btn-sm mg-btn" type="submit">Entregar</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="h5 fw-bold mt-4">Alquileres en curso</h2>
+  <p class="text-muted" th:if="${#lists.isEmpty(enCurso) and #lists.isEmpty(noDevueltos)}">No hay vehículos alquilados.</p>
+  <div class="table-responsive" th:unless="${#lists.isEmpty(enCurso) and #lists.isEmpty(noDevueltos)}">
+    <table class="table align-middle bg-white shadow-sm">
+      <thead class="table-light"><tr><th>Alquiler</th><th>Vehículo</th><th>Cliente</th><th>Límite</th><th>Estado</th><th>Devolución</th></tr></thead>
+      <tbody>
+        <tr th:each="a : ${noDevueltos}" class="table-danger">
+          <td th:text="${a.idAlquiler}">1</td>
+          <td th:text="|${a.reserva.vehiculo.marca} ${a.reserva.vehiculo.modelo}|">Vehículo</td>
+          <td th:text="${a.reserva.cliente.nombre}">Cliente</td>
+          <td th:text="${#temporals.format(a.fechaLimite, 'dd/MM/yyyy HH:mm')}">límite</td>
+          <td><span class="badge text-bg-danger">NO_DEVUELTO</span></td>
+          <td>
+            <form class="d-flex gap-2" th:action="@{/admin/alquileres/{id}/devolver(id=${a.idAlquiler})}" method="post">
+              <input class="form-control form-control-sm" name="observaciones" placeholder="Checklist: daños, combustible">
+              <button class="btn btn-sm btn-outline-dark" type="submit">Registrar</button>
+            </form>
+          </td>
+        </tr>
+        <tr th:each="a : ${enCurso}">
+          <td th:text="${a.idAlquiler}">1</td>
+          <td th:text="|${a.reserva.vehiculo.marca} ${a.reserva.vehiculo.modelo}|">Vehículo</td>
+          <td th:text="${a.reserva.cliente.nombre}">Cliente</td>
+          <td th:text="${#temporals.format(a.fechaLimite, 'dd/MM/yyyy HH:mm')}">límite</td>
+          <td><span class="badge text-bg-primary">EN_CURSO</span></td>
+          <td>
+            <form class="d-flex gap-2" th:action="@{/admin/alquileres/{id}/devolver(id=${a.idAlquiler})}" method="post">
+              <input class="form-control form-control-sm" name="observaciones" placeholder="Checklist: daños, combustible">
+              <button class="btn btn-sm btn-outline-dark" type="submit">Registrar</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="h5 fw-bold mt-4">Vehículos en revisión</h2>
+  <p class="text-muted" th:if="${#lists.isEmpty(enRevision)}">No hay vehículos en revisión.</p>
+  <ul class="list-group shadow-sm" th:unless="${#lists.isEmpty(enRevision)}">
+    <li class="list-group-item d-flex justify-content-between align-items-center" th:each="v : ${enRevision}">
+      <span th:text="|${v.marca} ${v.modelo}|">Vehículo</span>
+      <form th:action="@{/admin/vehiculos/{id}/aprobar(id=${v.idVehiculo})}" method="post">
+        <button class="btn btn-sm mg-btn" type="submit">Aprobar revisión</button>
+      </form>
+    </li>
+  </ul>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>

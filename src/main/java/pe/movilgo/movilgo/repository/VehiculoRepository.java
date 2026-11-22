@@ -16,6 +16,8 @@ public interface VehiculoRepository extends JpaRepository<Vehiculo, Long> {
 
     List<Vehiculo> findByEstadoOrderByPrecioDiaDesc(EstadoVehiculo estado);
 
+    List<Vehiculo> findByEstado(EstadoVehiculo estado);
+
     /**
      * Lee el vehículo e incrementa su @Version al confirmar la transacción.
      * Si dos clientes reservan el mismo vehículo a la vez, el segundo recibe un error de concurrencia (RN-02).
