@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/layout :: cabecera('Crear cuenta')}"></head>
+<body>
+<nav th:replace="~{fragmentos/layout :: menu}"></nav>
+<main class="container py-5" style="max-width: 640px">
+  <h1 class="h3 fw-bold mb-1">Crear cuenta</h1>
+  <p class="text-muted mb-4">Personas con DNI y empresas con RUC. Validamos tus datos para prevenir fraudes.</p>
+  <div class="alert alert-danger" th:if="${error}" th:text="${error}">Error</div>
+  <form th:action="@{/registro}" th:object="${clienteForm}" method="post" class="card card-body shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label" for="tipoDocumento">Documento</label>
+        <select class="form-select" th:field="*{tipoDocumento}" id="tipoDocumento">
+          <option th:each="t : ${tipos}" th:value="${t}" th:text="${t}">DNI</option>
+        </select>
+      </div>
+      <div class="col-md-8">
+        <label class="form-label" for="numeroDocumento">Número</label>
+        <input class="form-control" th:field="*{numeroDocumento}" id="numeroDocumento" inputmode="numeric"
+               th:classappend="${#fields.hasErrors('numeroDocumento')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{numeroDocumento}">Error</div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" for="nombre">Nombre completo o razón social</label>
+        <input class="form-control" th:field="*{nombre}" id="nombre"
+               th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{nombre}">Error</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="telefono">Celular</label>
+        <input class="form-control" th:field="*{telefono}" id="telefono" inputmode="tel"
+               th:classappend="${#fields.hasErrors('telefono')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{telefono}">Error</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="licencia">Licencia de conducir <small class="text-muted">(obligatoria con DNI)</small></label>
+        <input class="form-control" th:field="*{licencia}" id="licencia"
+               th:classappend="${#fields.hasErrors('licencia')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{licencia}">Error</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="correo">Correo</label>
+        <input class="form-control" type="email" th:field="*{correo}" id="correo"
+               th:classappend="${#fields.hasErrors('correo')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{correo}">Error</div>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="clave">Contraseña</label>
+        <input class="form-control" type="password" th:field="*{clave}" id="clave"
+               th:classappend="${#fields.hasErrors('clave')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:errors="*{clave}">Error</div>
+      </div>
+    </div>
+    <button class="btn mg-btn mt-4" type="submit">Crear cuenta</button>
+  </form>
+</main>
+<footer th:replace="~{fragmentos/layout :: pie}"></footer>
+</body>
+</html>
